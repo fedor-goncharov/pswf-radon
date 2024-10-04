@@ -7,9 +7,11 @@ using theory of one-dimensional [Prolate Spheroidal Wave Functions](https://en.w
 
 Recovery of high frequencies of the signal allows to achieve [super-resolution](https://en.wikipedia.org/wiki/Super-resolution_imaging) while the choice of tuning parameters is fully automatic. 
 
-<p float ="center" class="center">
+<p align="middle">
     <img src="images/phantom-2d.png" width="150" title="phantom" />
+    &nbsp; 
     <img src="images/naive-recon-k20-0p00.png" width="150" title="conventional reconstruction" />
+    &nbsp;
     <img src="images/pswf-recon-k20-0p00.png" width="150" title="PSWF-Radon reconstruction" />
 </p>
 
