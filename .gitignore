@@ -4,13 +4,16 @@
 *.svg
 *.zip 
 
+# ignore auxiliary
+*.json
+
 # ignore temp files 
 *~
 *.swp
 *.swo
 */octave-workspace
 
-# ignore 
+# ignore experiment folders
 prolate-2d-3d/legacy/
 prolate-2d-3d/temp/
 prolate-2d-3d/saved-images/

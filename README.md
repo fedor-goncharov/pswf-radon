@@ -1,28 +1,124 @@
-PSWF-Radon approach 
+PSWF-Radon approach for 2D/3D
 ======================
 
-This repository contains codes implementing PSWF-Radon approach for publications:
+PSWF-Radon approach allows to recover unknown function from its Fourier transform in 2D/3D being truncated to a finite euclidean ball.   
+In comparison with conventional method where unknown part of Fourier spectrum is extrapolated with zeros, we recover this part (up to some limit)  
+using theory of one-dimensional [Prolate Spheroidal Wave Functions](https://en.wikipedia.org/wiki/Prolate_spheroidal_wave_function).  
 
- * "PSWF-Radon approach to reconstruction from band-limited Hankel transform" by Fedor Goncharov, Mikhail Isaev, Roman Novikov, Rodion Zaytsev, 2024
+Recovery of high frequencies of the signal allows to achieve [super-resolution](https://en.wikipedia.org/wiki/Super-resolution_imaging) while the choice of tuning parameters is fully automatic. 
+
+<p float ="center" class="center">
+    <img src="images/phantom-2d.png" width="150" title="phantom" />
+    <img src="images/naive-recon-k20-0p00.png" width="150" title="conventional reconstruction" />
+    <img src="images/pswf-recon-k20-0p00.png" width="150" title="PSWF-Radon reconstruction" />
+</p>
+
+
+This repository contains an implementation of PSWF-Radon algorithm and related numerical experiments from 
+
+ 1. _PSWF-Radon approach to reconstruction from band-limited Hankel transform_ by Fedor Goncharov, Mikhail Isaev, Roman Novikov, Rodion Zaytsev, 2024
     [HAL](https://hal.science/hal-04714552) [ArXiv](http://arxiv.org/abs/2409.17409)
- * "Super-resolution reconstruction from truncated Hankel trasnform" by Fedor Goncharov, Mikhail Isaev, Roman Novikov, Rodion Zaytsev, 2024 
+
+ 2. _Super-resolution reconstruction from truncated Hankel trasnform_ by Fedor Goncharov, Mikhail Isaev, Roman Novikov, Rodion Zaytsev, 2024 
     [HAL](https://hal.science/hal-04714586)
 
-## A word before
+Original papers introducing PSWF-Radon approach are:
 
-TBD
+  3. _Reconstruction from the Fourier transform on the ball via prolate spheroidal wave functions_ Mikhail Isaev, Roman Novikov, 2022
+  [journal](https://www.sciencedirect.com/science/article/pii/S0021782422000617)
+
+  4. _Numerical reconstruction from the Fourier transform on the ball using prolate spheroidal wave functions_ Mikhail Isaev, Roman Novikov, Sabinin Grigory, 2024 [journal](https://link.springer.com/chapter/10.1007/978-3-031-41665-1_7)
+
+## One word before
+
+Code for PSWF-Radon approach is developed for [Octave](https://octave.org) on basis of [Scatter/Spheroidal library](https://github.com/radelman/scattering) originally designed for [Matlab](https://www.mathworks.com/products/matlab) (current repository is a _fork_ from this library).   
+We use only part of this libary to _pre-compute_ Prolate Spheroidal Wavefunctions (PSWFs) which are later used in PSWF-Radon approach for reconstructions.
 
 ## Requirements & Installation
 
-TBD
+#### Required libraries/software
 
-## Running scripts from articles
+* Linux-kernel OS with `Octave 8.4.0`
+*  installed [NFFT library](https://www-user.tu-chemnitz.de/~potts/nfft/) - for installation read the corresponding guidline from [here](https://www-user.tu-chemnitz.de/~potts/nfft/installation.php); we also advise you to build it with flags
+    * `--enable-all`
 
-TBD
+    * `--enable-openmp`
 
-## Organization of codes
+    * `--with-matlab=<path-to-save Matlab's MEX and .m files>` - compile NFFT into Matlab's MEX binaries, Octave will make calls to these functions
 
-TBD
+* [GNU MPFR libary](https://www.mpfr.org)
+
+In principle, it is possible to adapt our implementation for Windows if, for example, you 
+
+* use Matlab instead of Octave (this requires minimal changes of our codes due to close  syntaxes)
+
+* build NFFT for Windows with the above flag to enable support of Matlab
+
+
+#### Build binaries 
+
+1. copy this repository on your local machine (e.g. via `git clone` or download ZIP archive and unpack it)
+
+2. go to your home `.octaverc` and add path to compiled NFFT library for Matlab by adding line
+
+        addpath(<path to folder with NFFT>)
+
+    *Note*: folder `<path to folder with NFFT>` should contain `nfftmex.mex`, `nfft_get_*.m`, `nfft_set_*.m` and other Matlab's scripts for NFFT
+
+3. build binaries for computation of PSWFs
+
+        cd <path-to-folder with project>/spheroidal/sphwv; make
+
+#### Pre-computation of PSWFs
+
+1. in Octave go to folder of this repo 
+
+        cd <path-to-folder of this repo>
+
+2. add paths 
+
+        cd spheroidal; sandbox; 
+
+3. to sample PSWFs up to order `n_max` for frequency parameter `c` with equispaced `n_points` on `[-1,1]` run
+
+        generate_data_for_pswfs_m0_only(c, n_max, n_points)
+
+    this command may take some time and will take some hard-drive memory as it samples PSWFS and stores them in files in `/data` folder.   
+    To run codes from our papers run the above command for `c=10` and `c=15` with `n_max=29`, `n_points=1024`.
+
+## Running scripts for Papers 1, 2
+
+1. run Octave
+
+2. go to folder of this repo
+
+        cd <path-to-folder of this repo>
+
+3. add all necessary paths
+
+        sandbox; cd prolate-2d-3d; sandbox; cd ../spheroidal; sandbox
+
+4. check that current `pwd` should be `<path-to-folder of this repo>/spheroidal`
+
+        pwd
+
+5. in Octave's script editor open files 
+    
+    1. `<path-to-folder of this repo>/prolate-2d-3d/generate-scripts/generateArticleImages.m` - codes for Paper 1
+
+    2. `<path-to-folder of this repo>/prolate-2d-3d/generate-scripts/generateMultipoleReconstructions.m` - codes for Paper 2
+
+
+6. select pieces of code with your cursor and run them (in Octave to run selected text is `F9` key; logical pieces of code 
+are separated with multiline comments)
+
+**Important note:** simulations for 3D case in Paper 1 may require significant amount of RAM as one of the routines being called 
+is the inverse Radon transform implemented using NFFT   (up to 80GB in our experiments)  
+
+## Playground
+
+All codes related to PSWF-Radon approach are stored in `<path-to-folder of this repo>/prolate-2d-3d/`.  
+Check source codes there if you want to develop your own simulations.
 
 
 The scattering library
