@@ -1,0 +1,23 @@
+# ignore data
+*.txt
+*.png
+*.svg
+*.zip 
+
+# ignore temp files 
+*~
+*.swp
+*.swo
+*/octave-workspace
+
+# ignore 
+prolate-2d-3d/legacy/
+prolate-2d-3d/temp/
+prolate-2d-3d/saved-images/
+prolate-2d-3d/saved-data/
+prolate-2d-3d/saved-residuals/
+prolate-2d-3d/images/
+spheroidal/data/
+spheroidal/saved/
+
+
