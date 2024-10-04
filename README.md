@@ -1,3 +1,30 @@
+PSWF-Radon approach 
+======================
+
+This repository contains codes implementing PSWF-Radon approach for publications:
+
+ * "PSWF-Radon approach to reconstruction from band-limited Hankel transform" by Fedor Goncharov, Mikhail Isaev, Roman Novikov, Rodion Zaytsev, 2024
+    [HAL](https://hal.science/hal-04714552) [ArXiv](http://arxiv.org/abs/2409.17409)
+ * "Super-resolution reconstruction from truncated Hankel trasnform" by Fedor Goncharov, Mikhail Isaev, Roman Novikov, Rodion Zaytsev, 2024 
+    [HAL](https://hal.science/hal-04714586)
+
+## A word before
+
+TBD
+
+## Requirements & Installation
+
+TBD
+
+## Running scripts from articles
+
+TBD
+
+## Organization of codes
+
+TBD
+
+
 The scattering library
 ======================
 
